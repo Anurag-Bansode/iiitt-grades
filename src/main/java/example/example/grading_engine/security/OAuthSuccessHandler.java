@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
@@ -42,7 +43,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not registered"));
 
-        if (!user.isActive()) {
+        if (!user.getActive()) {
             auditLogService.logLoginFailure(email);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "User inactive");
             return;

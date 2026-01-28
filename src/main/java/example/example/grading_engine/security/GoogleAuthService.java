@@ -57,7 +57,7 @@ public class GoogleAuthService {
                     return new RuntimeException("User not registered");
                 });
 
-        if (!user.isActive()) {
+        if (!user.getActive()) {
             auditLogService.logLoginFailure(email);
             throw new RuntimeException("User not approved or inactive");
         }
