@@ -1,65 +1,99 @@
 package example.example.grading_engine.security;
 
+import example.example.grading_engine.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
-@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final OAuthSuccessHandler oAuthSuccessHandler;
+    @Value("http://localhost:8080")
+    private String frontendUrl;
+
+    @Bean
+    AccessDeniedHandler accessDeniedHandler() {
+        AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
+        handler.setErrorPage("/accessDenied");
+        return handler;
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(frontendUrl));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
+
+    private final JwtAuthenticationFilter jwtFilter;
+    private final CustomOAuth2UserService oauthUserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     public SecurityConfig(
-            JwtAuthenticationFilter jwtAuthenticationFilter,
-            OAuthSuccessHandler oAuthSuccessHandler
+            JwtAuthenticationFilter jwtFilter,
+            CustomOAuth2UserService oauthUserService,
+            JwtUtil jwtUtil, OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler
     ) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.oAuthSuccessHandler = oAuthSuccessHandler;
+        this.jwtFilter = jwtFilter;
+        this.oauthUserService = oauthUserService;
+        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(
+            HttpSecurity http,
+            UserRepository userRepository
+    ) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())
-
-                // ✅ Stateless JWT-based auth
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(
+                        s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/oauth2/**", "/login/**").permitAll()
-                        .requestMatchers("/student/**").hasRole("STUDENT")
-                        .requestMatchers("/faculty/**").hasRole("FACULTY")
-                        .requestMatchers("/hod/**").hasRole("HOD")
+                        .requestMatchers("/api/accessDenied").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/faculty/**").hasRole("FACULTY")
+                        .requestMatchers("/api/hod/**").hasRole("HOD")
+                        .requestMatchers("/api/student/**").hasRole("STUDENT")
                         .anyRequest().authenticated()
                 )
-
-                // ✅ OAuth only for login → JWT is issued in success handler
-                .oauth2Login(oauth ->
-                        oauth.successHandler(oAuthSuccessHandler)
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler(accessDeniedHandler())
                 )
-
-                // ✅ Proper 401 handling
-                .exceptionHandling(ex ->
-                        ex.authenticationEntryPoint(
-                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
-                        )
+                .oauth2Login(oauth -> oauth
+                        .userInfoEndpoint(u -> u.userService(oauthUserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
                 )
-
-                // ✅ JWT filter handles ALL protected requests
                 .addFilterBefore(
-                        jwtAuthenticationFilter,
+                        jwtFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
+
+
 
         return http.build();
     }

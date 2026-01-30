@@ -1,15 +1,18 @@
 package example.example.grading_engine.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/grades")
+@RequestMapping("/")
+
 public class GradeController {
 
-    @PostMapping
+    @GetMapping("/")
+    public String loginSuccess() {
+        return "Login Successful";
+    }
+
+    @PostMapping()
     public String submitGrades(
             @RequestParam("semester") String semester,
             @RequestParam("courseCode") String courseCode,
@@ -18,5 +21,8 @@ public class GradeController {
         return String.format("semester=%s, courseCode=%s, subjectId=%d",
                 semester, courseCode, subjectId);
     }
+
+
+
 
 }
