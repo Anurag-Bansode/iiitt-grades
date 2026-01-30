@@ -76,6 +76,6 @@ public class OAuth2LoginSuccessHandler
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        response.sendRedirect("http://localhost:8080/api/auth/me");
+        response.sendRedirect("http://localhost:8080/api/auth/me");  //change later to where frontend wants to go app.frontend.url
     }
 }

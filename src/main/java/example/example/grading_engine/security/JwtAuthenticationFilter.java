@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = null;
 
-        // 1️⃣ Try cookie first
+        // Try cookie first
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if ("ACCESS_TOKEN".equals(cookie.getName())) {
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        // 2️⃣ Fallback: Authorization header (optional)
+        //  Fallback: Authorization header (optional)
         if (token == null) {
             String header = request.getHeader("Authorization");
             if (header != null && header.startsWith("Bearer ")) {
