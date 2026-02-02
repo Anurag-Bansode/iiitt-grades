@@ -22,7 +22,7 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Value("http://localhost:8080")
+    @Value("${app.frontend.url}")
     private String frontendUrl;
 
     @Bean

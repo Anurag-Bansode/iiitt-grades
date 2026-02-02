@@ -69,7 +69,7 @@ public class OAuth2LoginSuccessHandler
                         .httpOnly(true)
                         .secure(!isLocal)
                         .sameSite(isLocal ? "Lax" : "None")
-                        .path("/auth/refresh")
+                        .path("/api/auth/refresh")
                         .maxAge(Duration.ofDays(7))
                         .build();
 
