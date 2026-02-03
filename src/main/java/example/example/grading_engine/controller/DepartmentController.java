@@ -1,7 +1,7 @@
 package example.example.grading_engine.controller;
 
 import example.example.grading_engine.dto.CreateDepartmentRequest;
-import example.example.grading_engine.dto.DepartmentResponse;
+import example.example.grading_engine.dto.CreateDepartmentResponse;
 import example.example.grading_engine.service.impl.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,10 +22,10 @@ public class DepartmentController {
     }
 
     @PostMapping("/addDepartment")
-    public ResponseEntity<DepartmentResponse> createDepartment(
+    public ResponseEntity<CreateDepartmentResponse> createDepartment(
             @Valid @RequestBody CreateDepartmentRequest request
     ) {
-        DepartmentResponse response = departmentService.createDepartment(request);
+        CreateDepartmentResponse response = departmentService.createDepartment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

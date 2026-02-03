@@ -1,7 +1,7 @@
 package example.example.grading_engine.service.impl;
 
 import example.example.grading_engine.dto.CreateDepartmentRequest;
-import example.example.grading_engine.dto.DepartmentResponse;
+import example.example.grading_engine.dto.CreateDepartmentResponse;
 import example.example.grading_engine.model.entity.Department;
 import example.example.grading_engine.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class DepartmentService  {
         this.departmentRepository = departmentRepository;
     }
 
-    public DepartmentResponse createDepartment(CreateDepartmentRequest request) {
+    public CreateDepartmentResponse createDepartment(CreateDepartmentRequest request) {
 
         if (departmentRepository.existsByCode(request.code())) {
             throw new IllegalArgumentException("Department with this code already exists");
@@ -31,7 +31,7 @@ public class DepartmentService  {
 
         Department saved = departmentRepository.save(department);
 
-        return new DepartmentResponse(
+        return new CreateDepartmentResponse(
                 saved.getId(),
                 saved.getCode(),
                 saved.getName()
