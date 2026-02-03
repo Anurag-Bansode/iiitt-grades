@@ -80,7 +80,7 @@ public class AuthController {
                         .httpOnly(true)
                         .secure(true)
                         .sameSite("None")
-                        .path("/auth/refresh")
+                        .path("/api/auth/refresh")
                         .maxAge(0)
                         .build();
 
@@ -110,6 +110,14 @@ public class AuthController {
                 "authenticated", true,
                 "userId", userId,
                 "role", role
+        );
+    }
+
+    @GetMapping("/accessDenied")
+    public Map<String, Object> denied() {
+        return Map.of(
+                "error", "ACCESS_DENIED",
+                "message", "You do not have permission to access this resource"
         );
     }
 }

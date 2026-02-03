@@ -1,28 +1,35 @@
 package example.example.grading_engine.controller;
 
+import example.example.grading_engine.dto.StudentMarksPerSubjectDTO;
+import example.example.grading_engine.service.impl.SubjectMarksQueryService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/")
+import java.util.List;
 
+@RestController
+@PreAuthorize("hasAnyRole('HOD','FACULTY')")
+@RequestMapping("/api/grades/get-marks-per-subject")
 public class GradeController {
 
-    @GetMapping("/")
-    public String loginSuccess() {
+    private final SubjectMarksQueryService subjectMarksQueryService;
+
+    public GradeController(SubjectMarksQueryService subjectMarksQueryService) {
+        this.subjectMarksQueryService = subjectMarksQueryService;
+    }
+
+    @GetMapping("/ping")
+    public String ping() {
         return "Login Successful";
     }
 
-    @PostMapping()
-    public String submitGrades(
-            @RequestParam("semester") String semester,
-            @RequestParam("courseCode") String courseCode,
-            @RequestParam("subjectId") Long subjectId) {
+    @GetMapping
+    public List<StudentMarksPerSubjectDTO> getClassMarks(
+            @RequestParam("subjectCode") String subjectCode,
+            @RequestParam("academicYear") String academicYear,
+            @RequestParam("semester") Integer semester) {
 
-        return String.format("semester=%s, courseCode=%s, subjectId=%d",
-                semester, courseCode, subjectId);
+
+        return subjectMarksQueryService.getClassMarksForSubject(subjectCode, semester, academicYear);
     }
-
-
-
-
 }

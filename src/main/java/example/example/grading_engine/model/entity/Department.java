@@ -107,5 +107,7 @@ public class Department {
         public Department build() {
             return new Department(id, code, name);
         }
+
+
     }
 }
