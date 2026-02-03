@@ -138,6 +138,10 @@
 			<artifactId>google-http-client-gson</artifactId>
 			<version>1.45.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-csv</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>
