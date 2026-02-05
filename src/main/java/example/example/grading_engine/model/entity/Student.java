@@ -19,12 +19,17 @@ public class Student {
     @Column(name = "roll_number")
     private String rollNumber;
 
+    @Column(name = "class_code")
+    private String classCode;
+
     public Student() {
+
     }
 
-    public Student(UUID id, String rollNumber) {
+    public Student(UUID id, String rollNumber, String classCode) {
         this.id = id;
         this.rollNumber = rollNumber;
+        this.classCode = classCode;
     }
 
     public UUID getId() {
@@ -43,6 +48,14 @@ public class Student {
         this.rollNumber = rollNumber;
     }
 
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,17 +65,19 @@ public class Student {
     }
 
     @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
                 ", rollNumber='" + rollNumber + '\'' +
+                ", classCode='" + classCode + '\'' +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
 
     public static Builder builder() {
         return new Builder();
@@ -71,6 +86,7 @@ public class Student {
     public static class Builder {
         private UUID id;
         private String rollNumber;
+        private String classCode;
 
         public Builder id(UUID id) {
             this.id = id;
@@ -82,8 +98,13 @@ public class Student {
             return this;
         }
 
+        public Builder classCode(String classCode) {
+            this.classCode = classCode;
+            return this;
+        }
+
         public Student build() {
-            return new Student(id, rollNumber);
+            return new Student(id, rollNumber, classCode);
         }
     }
 }

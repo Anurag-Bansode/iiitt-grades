@@ -17,11 +17,12 @@ public class StudentCreationRepository {
 
     public UUID createStudent(StudentCsvRow row) {
         return jdbcTemplate.queryForObject(
-                "SELECT create_student_user(?, ?, ?)",
+                "SELECT create_student_user(?, ?, ?, ?)",
                 UUID.class,
                 row.fullName(),
                 row.email(),
-                row.rollNumber()
+                row.rollNumber(),
+                row.classCode()
         );
     }
 }
