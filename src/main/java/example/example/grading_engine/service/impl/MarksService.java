@@ -40,6 +40,40 @@ public class MarksService {
                 types
         );
 
+//        Mock data (uncomment to test without DB)
+//        List<Mark> marks = new ArrayList<>();
+//
+//        for (int i = 1; i <= 5; i++) {
+//            Mark internal = new Mark();
+//            internal.setId(UUID.randomUUID());
+//            internal.setMarksType(MarkComponentType.INTERNAL);
+//            internal.setMarks(BigDecimal.valueOf(20 + i));
+//
+//            Mark endsem = new Mark();
+//            endsem.setId(UUID.randomUUID());
+//            endsem.setMarksType(MarkComponentType.CT1);
+//            endsem.setMarks(BigDecimal.valueOf(50 + i));
+//
+//            // enrollment + nested objects
+//            Student student = new example.example.grading_engine.model.entity.Student();
+//            student.setId(UUID.randomUUID());
+//            student.setRollNumber("CS22B10" + i);
+//
+//            StudentEnrollment enrollment = new StudentEnrollment();
+//            enrollment.setStudent(student);
+//
+//            AcademicSession session = new AcademicSession();
+//            session.setGradingPolicyVer("V1_STDDEV");
+//
+//            enrollment.setSession(session);
+//
+//            internal.setEnrollment(enrollment);
+//            endsem.setEnrollment(enrollment);
+//
+//            marks.add(internal);
+//            marks.add(endsem);
+//        }
+
         Map<UUID, StudentBucket> byStudent = new LinkedHashMap<>();
         for (Mark m : marks) {
             if (m == null || m.getEnrollment() == null || m.getEnrollment().getStudent() == null) continue;
@@ -75,7 +109,6 @@ public class MarksService {
         BigDecimal mean = MarksCalculationUtils.calculateMean(totals);
         BigDecimal stddev = MarksCalculationUtils.calculateStdDev(totals, mean);
 
-//        return new SubjectMarks_GradingResponse(entries, mean, stddev);
 
         // Resolve grading policy (assumes same policy for the entire class & subject)
         String policyVersion = marks.isEmpty()

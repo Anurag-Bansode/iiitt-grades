@@ -30,7 +30,7 @@ public class PolicyV1_StdDevRelative implements GradingPolicy {
         BigDecimal passCutoff = min35.min(meanHalf).min(maxBy3);
 
         for (var student : ctx.getStudents()) {
-            BigDecimal total = student.total();
+            BigDecimal total = student.getTotal();
 
             if (total.compareTo(passCutoff) < 0) {
                 student.assignGrade("F");

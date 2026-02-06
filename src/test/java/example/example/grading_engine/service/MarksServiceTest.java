@@ -55,15 +55,15 @@ class MarksServiceTest {
         boolean foundTopGrade = false;
 
         for (var s : response.students()) {
-            assertNotNull(s.grade(), "Grade must be assigned by policy");
+            assertNotNull(s.getGrade(), "Grade must be assigned by policy");
 
-            if (s.total().compareTo(BigDecimal.valueOf(35)) < 0) {
-                assertEquals("F", s.grade());
+            if (s.getTotal().compareTo(BigDecimal.valueOf(35)) < 0) {
+                assertEquals("F", s.getGrade());
                 foundFail = true;
             }
 
-            if (s.total().compareTo(BigDecimal.valueOf(85)) >= 0) {
-                assertNotEquals("F", s.grade(), "High scorer must not fail");
+            if (s.getTotal().compareTo(BigDecimal.valueOf(85)) >= 0) {
+                assertNotEquals("F", s.getGrade(), "High scorer must not fail");
                 foundTopGrade = true;
             }
         }

@@ -36,12 +36,12 @@ public record SubjectMarks_GradingResponse(
             this.average = average;
         }
 
-        public UUID studentId() { return studentId; }
-        public String rollNumber() { return rollNumber; }
-        public Map<MarkComponentType, BigDecimal> marksByType() { return marksByType; }
-        public BigDecimal total() { return total; }
-        public BigDecimal average() { return average; }
-        public String grade() { return grade; }
+        public UUID getStudentId() { return studentId; }
+        public String getRollNumber() { return rollNumber; }
+        public Map<MarkComponentType, BigDecimal> getMarksByType() { return marksByType; }
+        public BigDecimal getTotal() { return total; }
+        public BigDecimal getAverage() { return average; }
+        public String getGrade() { return grade; }
 
         public void assignGrade(String grade) {
             this.grade = grade;
