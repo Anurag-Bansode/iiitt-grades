@@ -14,9 +14,9 @@ public class GradeBoundary {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "submission_id", nullable = false)
-    private GradeSubmission submission;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "statistics_id", nullable = false)
+    private GradeStatistics statistics;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "grade_letter", nullable = false)
@@ -33,13 +33,13 @@ public class GradeBoundary {
 
     public GradeBoundary(
             UUID id,
-            GradeSubmission submission,
+            GradeStatistics statisticsId,
             GradeLetter gradeLetter,
             BigDecimal minScore,
             BigDecimal maxScore
     ) {
         this.id = id;
-        this.submission = submission;
+        this.statistics = statisticsId;
         this.gradeLetter = gradeLetter;
         this.minScore = minScore;
         this.maxScore = maxScore;
@@ -53,12 +53,12 @@ public class GradeBoundary {
         this.id = id;
     }
 
-    public GradeSubmission getSubmission() {
-        return submission;
+    public GradeStatistics getStatisticsId() {
+        return statistics;
     }
 
-    public void setSubmission(GradeSubmission submission) {
-        this.submission = submission;
+    public void setStatisticsId(GradeStatistics statisticsId) {
+        this.statistics = statisticsId;
     }
 
     public GradeLetter getGradeLetter() {
@@ -114,7 +114,7 @@ public class GradeBoundary {
 
     public static class Builder {
         private UUID id;
-        private GradeSubmission submission;
+        private GradeStatistics statistics;
         private GradeLetter gradeLetter;
         private BigDecimal minScore;
         private BigDecimal maxScore;
@@ -124,8 +124,8 @@ public class GradeBoundary {
             return this;
         }
 
-        public Builder submission(GradeSubmission submission) {
-            this.submission = submission;
+        public Builder statistics(GradeStatistics statistics) {
+            this.statistics = statistics;
             return this;
         }
 
@@ -147,7 +147,7 @@ public class GradeBoundary {
         public GradeBoundary build() {
             return new GradeBoundary(
                     id,
-                    submission,
+                    statistics,
                     gradeLetter,
                     minScore,
                     maxScore

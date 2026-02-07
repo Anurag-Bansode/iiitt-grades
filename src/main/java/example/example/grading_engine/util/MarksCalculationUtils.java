@@ -75,4 +75,32 @@ public class MarksCalculationUtils {
         }
         return x.setScale(scale, RoundingMode.HALF_UP);
     }
+
+    public static BigDecimal calculateMin(EnumMap<MarkComponentType, BigDecimal> complete) {
+        if (complete == null || complete.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal min = null;
+        for (BigDecimal val : complete.values()) {
+            if (val == null) continue;
+            if (min == null || val.compareTo(min) < 0) {
+                min = val;
+            }
+        }
+        return min != null ? min : BigDecimal.ZERO;
+    }
+
+    public static BigDecimal calculateMax(EnumMap<MarkComponentType, BigDecimal> complete) {
+        if (complete == null || complete.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal max = null;
+        for (BigDecimal val : complete.values()) {
+            if (val == null) continue;
+            if (max == null || val.compareTo(max) > 0) {
+                max = val;
+            }
+        }
+        return max != null ? max : BigDecimal.ZERO;
+    }
 }

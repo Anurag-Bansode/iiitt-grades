@@ -1,6 +1,7 @@
 
 package example.example.grading_engine.dto;
 
+import example.example.grading_engine.enums.grading.GradeLetter;
 import example.example.grading_engine.enums.marksvalidation.MarkComponentType;
 
 import java.math.BigDecimal;
@@ -11,8 +12,8 @@ import java.util.UUID;
 public record SubjectMarks_GradingResponse(
         List<StudentInitialGrade> students,
         BigDecimal meanTotal,
-        BigDecimal standardDeviationTotal
-) {
+        BigDecimal standardDeviationTotal,
+        Map<GradeLetter, BigDecimal> gradeBoundaries) {
     public static class StudentInitialGrade {
 
         private final UUID studentId;
@@ -20,7 +21,8 @@ public record SubjectMarks_GradingResponse(
         private final Map<MarkComponentType, BigDecimal> marksByType;
         private final BigDecimal total;
         private final BigDecimal average;
-        private String grade;
+        private GradeLetter grade;
+        Map<GradeLetter, BigDecimal> gradeBoundaries;
 
         public StudentInitialGrade(
                 UUID studentId,
@@ -41,10 +43,19 @@ public record SubjectMarks_GradingResponse(
         public Map<MarkComponentType, BigDecimal> getMarksByType() { return marksByType; }
         public BigDecimal getTotal() { return total; }
         public BigDecimal getAverage() { return average; }
-        public String getGrade() { return grade; }
+        public GradeLetter getGrade() { return grade; }
 
-        public void assignGrade(String grade) {
+        public Map<GradeLetter, BigDecimal> getGradeBoundaries() {
+            return gradeBoundaries;
+        }
+
+        public void setGradeBoundaries(Map<GradeLetter, BigDecimal> gradeBoundaries) {
+            this.gradeBoundaries = gradeBoundaries;
+        }
+
+        public void setGrade(GradeLetter grade) {
             this.grade = grade;
         }
+
     }
 }

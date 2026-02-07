@@ -15,46 +15,45 @@ public class GradeSubmission {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id", nullable = false)
-    private Subject subject;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session_id", nullable = false)
-    private AcademicSession session;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "statistics_id", nullable = false)
+    private GradeStatistics statistics;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private SubmissionStatus status;
 
+    @Column(name = "policy_version", nullable = false)
+    private String policyVersion;
+
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
 
-    @Column(name = "approved_at")
-    private LocalDateTime approvedAt;
-
     @Column(name = "locked_at")
     private LocalDateTime lockedAt;
+
+    @Column(name = "last_edited_at", nullable = false)
+    private LocalDateTime lastEditedAt;
 
     public GradeSubmission() {
     }
 
     public GradeSubmission(
             UUID id,
-            Subject subject,
-            AcademicSession session,
+            GradeStatistics statistics,
             SubmissionStatus status,
+            String policyVersion,
             LocalDateTime submittedAt,
-            LocalDateTime approvedAt,
-            LocalDateTime lockedAt
+            LocalDateTime lockedAt,
+            LocalDateTime lastEditedAt
     ) {
         this.id = id;
-        this.subject = subject;
-        this.session = session;
+        this.statistics = statistics;
         this.status = status;
+        this.policyVersion = policyVersion;
         this.submittedAt = submittedAt;
-        this.approvedAt = approvedAt;
         this.lockedAt = lockedAt;
+        this.lastEditedAt = lastEditedAt;
     }
 
     public UUID getId() {
@@ -65,20 +64,12 @@ public class GradeSubmission {
         this.id = id;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public GradeStatistics getStatistics() {
+        return statistics;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    public AcademicSession getSession() {
-        return session;
-    }
-
-    public void setSession(AcademicSession session) {
-        this.session = session;
+    public void setStatistics(GradeStatistics statistics) {
+        this.statistics = statistics;
     }
 
     public SubmissionStatus getStatus() {
@@ -89,6 +80,14 @@ public class GradeSubmission {
         this.status = status;
     }
 
+    public String getPolicyVersion() {
+        return policyVersion;
+    }
+
+    public void setPolicyVersion(String policyVersion) {
+        this.policyVersion = policyVersion;
+    }
+
     public LocalDateTime getSubmittedAt() {
         return submittedAt;
     }
@@ -97,20 +96,20 @@ public class GradeSubmission {
         this.submittedAt = submittedAt;
     }
 
-    public LocalDateTime getApprovedAt() {
-        return approvedAt;
-    }
-
-    public void setApprovedAt(LocalDateTime approvedAt) {
-        this.approvedAt = approvedAt;
-    }
-
     public LocalDateTime getLockedAt() {
         return lockedAt;
     }
 
     public void setLockedAt(LocalDateTime lockedAt) {
         this.lockedAt = lockedAt;
+    }
+
+    public LocalDateTime getLastEditedAt() {
+        return lastEditedAt;
+    }
+
+    public void setLastEditedAt(LocalDateTime lastEditedAt) {
+        this.lastEditedAt = lastEditedAt;
     }
 
     @Override
@@ -131,9 +130,10 @@ public class GradeSubmission {
         return "GradeSubmission{" +
                 "id=" + id +
                 ", status=" + status +
+                ", policyVersion='" + policyVersion + '\'' +
                 ", submittedAt=" + submittedAt +
-                ", approvedAt=" + approvedAt +
                 ", lockedAt=" + lockedAt +
+                ", lastEditedAt=" + lastEditedAt +
                 '}';
     }
 
@@ -143,25 +143,20 @@ public class GradeSubmission {
 
     public static class Builder {
         private UUID id;
-        private Subject subject;
-        private AcademicSession session;
+        private GradeStatistics statistics;
         private SubmissionStatus status;
+        private String policyVersion;
         private LocalDateTime submittedAt;
-        private LocalDateTime approvedAt;
         private LocalDateTime lockedAt;
+        private LocalDateTime lastEditedAt;
 
         public Builder id(UUID id) {
             this.id = id;
             return this;
         }
 
-        public Builder subject(Subject subject) {
-            this.subject = subject;
-            return this;
-        }
-
-        public Builder session(AcademicSession session) {
-            this.session = session;
+        public Builder statistics(GradeStatistics statistics) {
+            this.statistics = statistics;
             return this;
         }
 
@@ -170,13 +165,13 @@ public class GradeSubmission {
             return this;
         }
 
-        public Builder submittedAt(LocalDateTime submittedAt) {
-            this.submittedAt = submittedAt;
+        public Builder policyVersion(String policyVersion) {
+            this.policyVersion = policyVersion;
             return this;
         }
 
-        public Builder approvedAt(LocalDateTime approvedAt) {
-            this.approvedAt = approvedAt;
+        public Builder submittedAt(LocalDateTime submittedAt) {
+            this.submittedAt = submittedAt;
             return this;
         }
 
@@ -185,15 +180,20 @@ public class GradeSubmission {
             return this;
         }
 
+        public Builder lastEditedAt(LocalDateTime lastEditedAt) {
+            this.lastEditedAt = lastEditedAt;
+            return this;
+        }
+
         public GradeSubmission build() {
             return new GradeSubmission(
                     id,
-                    subject,
-                    session,
+                    statistics,
                     status,
+                    policyVersion,
                     submittedAt,
-                    approvedAt,
-                    lockedAt
+                    lockedAt,
+                    lastEditedAt
             );
         }
     }

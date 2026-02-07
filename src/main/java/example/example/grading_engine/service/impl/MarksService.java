@@ -41,8 +41,8 @@ public class MarksService {
         );
 
 //        Mock data (uncomment to test without DB)
+
 //        List<Mark> marks = new ArrayList<>();
-//
 //        for (int i = 1; i <= 5; i++) {
 //            Mark internal = new Mark();
 //            internal.setId(UUID.randomUUID());
@@ -91,7 +91,6 @@ public class MarksService {
         for (StudentBucket sb : byStudent.values()) {
             EnumMap<MarkComponentType, BigDecimal> complete =
                     MarksCalculationUtils.buildCompleteMarks(sb.marks, types);
-
             BigDecimal total = MarksCalculationUtils.calculateTotal(complete);
             BigDecimal average = MarksCalculationUtils.calculateAverage(total, complete.size());
 
@@ -129,7 +128,14 @@ public class MarksService {
                 stddev
         );
 
-        return policy.apply(context);
+        SubjectMarks_GradingResponse response = policy.apply(context);
+
+
+
+
+
+        return response;
+
     }
 
     // simple bucket class used while building the response
