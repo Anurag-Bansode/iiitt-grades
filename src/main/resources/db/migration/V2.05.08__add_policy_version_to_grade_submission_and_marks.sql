@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS final_grades CASCADE;
+DROP TABLE IF EXISTS grade_boundaries CASCADE;
+DROP TABLE IF EXISTS grade_statistics CASCADE;
+DROP TABLE IF EXISTS grade_submissions CASCADE;

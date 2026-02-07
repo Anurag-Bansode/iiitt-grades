@@ -1,6 +1,7 @@
 package example.example.grading_engine.enums.grading;
 
 public enum GradeLetter {
+    S(11),
     A(10),
     B(9),
     C(8),

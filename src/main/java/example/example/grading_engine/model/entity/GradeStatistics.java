@@ -4,6 +4,8 @@ package example.example.grading_engine.model.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -11,13 +13,8 @@ import java.util.UUID;
 public class GradeStatistics {
 
     @Id
-    @Column(name = "submission_id", columnDefinition = "uuid")
-    private UUID submissionId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "submission_id")
-    private GradeSubmission submission;
+    @Column(columnDefinition = "uuid")
+    private UUID id;
 
     @Column(name = "mean", nullable = false, precision = 10, scale = 4)
     private BigDecimal mean;
@@ -25,35 +22,38 @@ public class GradeStatistics {
     @Column(name = "std_deviation", nullable = false, precision = 10, scale = 4)
     private BigDecimal stdDeviation;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     public GradeStatistics() {
     }
 
     public GradeStatistics(
-            UUID submissionId,
-            GradeSubmission submission,
+            UUID id,
+            LocalDateTime createdAt,
             BigDecimal mean,
             BigDecimal stdDeviation
     ) {
-        this.submissionId = submissionId;
-        this.submission = submission;
+        this.createdAt=createdAt;
+        this.id = id;
         this.mean = mean;
         this.stdDeviation = stdDeviation;
     }
 
-    public UUID getSubmissionId() {
-        return submissionId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setSubmissionId(UUID submissionId) {
-        this.submissionId = submissionId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public GradeSubmission getSubmission() {
-        return submission;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setSubmission(GradeSubmission submission) {
-        this.submission = submission;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public BigDecimal getMean() {
@@ -74,21 +74,16 @@ public class GradeStatistics {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GradeStatistics that = (GradeStatistics) o;
-        return submissionId != null ? submissionId.equals(that.submissionId) : that.submissionId == null;
+        return Objects.equals(id, that.id) && Objects.equals(mean, that.mean) && Objects.equals(stdDeviation, that.stdDeviation);
     }
 
-    @Override
-    public int hashCode() {
-        return submissionId != null ? submissionId.hashCode() : 0;
-    }
 
     @Override
     public String toString() {
         return "GradeStatistics{" +
-                "submissionId=" + submissionId +
+                "id=" + id +
                 ", mean=" + mean +
                 ", stdDeviation=" + stdDeviation +
                 '}';
@@ -99,18 +94,18 @@ public class GradeStatistics {
     }
 
     public static class Builder {
-        private UUID submissionId;
-        private GradeSubmission submission;
+        private UUID id;
         private BigDecimal mean;
         private BigDecimal stdDeviation;
+        private LocalDateTime createdAt;
 
-        public Builder submissionId(UUID submissionId) {
-            this.submissionId = submissionId;
+        public Builder Id(UUID id) {
+            this.id = id;
             return this;
         }
 
-        public Builder submission(GradeSubmission submission) {
-            this.submission = submission;
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
             return this;
         }
 
@@ -126,8 +121,8 @@ public class GradeStatistics {
 
         public GradeStatistics build() {
             return new GradeStatistics(
-                    submissionId,
-                    submission,
+                    id,
+                    createdAt,
                     mean,
                     stdDeviation
             );

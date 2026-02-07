@@ -8,32 +8,29 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "final_grades", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"student_id", "subject_id", "academic_year"})
-})
+@Table(
+        name = "final_grades",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"enrollment_id", "submission_id"})
+        }
+)
 public class FinalGrade {
 
     @Id
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "enrollment_id", nullable = false)
+    private StudentEnrollment enrollment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id", nullable = false)
-    private Subject subject;
-
-    @Column(name = "academic_year", nullable = false)
-    private String academicYear;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "submission_id", nullable = false)
+    private GradeSubmission submission;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "grade", nullable = false)
-    private GradeLetter grade;
-
-    @Column(name = "total_marks", nullable = false)
-    private Integer totalMarks;
+    @Column(name = "grade_letter", nullable = false)
+    private GradeLetter gradeLetter;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -43,19 +40,15 @@ public class FinalGrade {
 
     public FinalGrade(
             UUID id,
-            Student student,
-            Subject subject,
-            String academicYear,
-            GradeLetter grade,
-            Integer totalMarks,
+            StudentEnrollment enrollment,
+            GradeSubmission submission,
+            GradeLetter gradeLetter,
             LocalDateTime createdAt
     ) {
         this.id = id;
-        this.student = student;
-        this.subject = subject;
-        this.academicYear = academicYear;
-        this.grade = grade;
-        this.totalMarks = totalMarks;
+        this.enrollment = enrollment;
+        this.submission = submission;
+        this.gradeLetter = gradeLetter;
         this.createdAt = createdAt;
     }
 
@@ -67,44 +60,28 @@ public class FinalGrade {
         this.id = id;
     }
 
-    public Student getStudent() {
-        return student;
+    public StudentEnrollment getEnrollment() {
+        return enrollment;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setEnrollment(StudentEnrollment enrollment) {
+        this.enrollment = enrollment;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public GradeSubmission getSubmission() {
+        return submission;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setSubmission(GradeSubmission submission) {
+        this.submission = submission;
     }
 
-    public String getAcademicYear() {
-        return academicYear;
+    public GradeLetter getGradeLetter() {
+        return gradeLetter;
     }
 
-    public void setAcademicYear(String academicYear) {
-        this.academicYear = academicYear;
-    }
-
-    public GradeLetter getGrade() {
-        return grade;
-    }
-
-    public void setGrade(GradeLetter grade) {
-        this.grade = grade;
-    }
-
-    public Integer getTotalMarks() {
-        return totalMarks;
-    }
-
-    public void setTotalMarks(Integer totalMarks) {
-        this.totalMarks = totalMarks;
+    public void setGradeLetter(GradeLetter gradeLetter) {
+        this.gradeLetter = gradeLetter;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -132,9 +109,7 @@ public class FinalGrade {
     public String toString() {
         return "FinalGrade{" +
                 "id=" + id +
-                ", academicYear='" + academicYear + '\'' +
-                ", grade=" + grade +
-                ", totalMarks=" + totalMarks +
+                ", gradeLetter=" + gradeLetter +
                 ", createdAt=" + createdAt +
                 '}';
     }
@@ -145,11 +120,9 @@ public class FinalGrade {
 
     public static class Builder {
         private UUID id;
-        private Student student;
-        private Subject subject;
-        private String academicYear;
-        private GradeLetter grade;
-        private Integer totalMarks;
+        private StudentEnrollment enrollment;
+        private GradeSubmission submission;
+        private GradeLetter gradeLetter;
         private LocalDateTime createdAt;
 
         public Builder id(UUID id) {
@@ -157,28 +130,18 @@ public class FinalGrade {
             return this;
         }
 
-        public Builder student(Student student) {
-            this.student = student;
+        public Builder enrollment(StudentEnrollment enrollment) {
+            this.enrollment = enrollment;
             return this;
         }
 
-        public Builder subject(Subject subject) {
-            this.subject = subject;
+        public Builder submission(GradeSubmission submission) {
+            this.submission = submission;
             return this;
         }
 
-        public Builder academicYear(String academicYear) {
-            this.academicYear = academicYear;
-            return this;
-        }
-
-        public Builder grade(GradeLetter grade) {
-            this.grade = grade;
-            return this;
-        }
-
-        public Builder totalMarks(Integer totalMarks) {
-            this.totalMarks = totalMarks;
+        public Builder gradeLetter(GradeLetter gradeLetter) {
+            this.gradeLetter = gradeLetter;
             return this;
         }
 
@@ -190,11 +153,9 @@ public class FinalGrade {
         public FinalGrade build() {
             return new FinalGrade(
                     id,
-                    student,
-                    subject,
-                    academicYear,
-                    grade,
-                    totalMarks,
+                    enrollment,
+                    submission,
+                    gradeLetter,
                     createdAt
             );
         }

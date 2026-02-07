@@ -1,6 +1,13 @@
 package example.example.grading_engine.controller;
 
+import example.example.grading_engine.dto.SubjectMarks_GradingRequest;
+import example.example.grading_engine.dto.SubjectMarks_GradingResponse;
+import example.example.grading_engine.service.impl.MarksService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,9 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/faculty/marks")
 public class MarksController {
 
-    @PostMapping("/getClassMarks")
-    public String getClassMarks() {
-        return "";
+
+    private final MarksService marksService;
+
+    public MarksController(MarksService marksService) {
+        this.marksService = marksService;
     }
+
+
+    @PostMapping("/getGrading")
+    public ResponseEntity<SubjectMarks_GradingResponse> getGrading(
+            @Valid @RequestBody SubjectMarks_GradingRequest request
+    ) {
+
+        SubjectMarks_GradingResponse response = marksService.getGrading(request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
 }
