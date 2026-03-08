@@ -1,6 +1,5 @@
 package example.example.grading_engine.model.entity;
 
-
 import example.example.grading_engine.enums.academicstructure.AcademicStatus;
 import example.example.grading_engine.enums.userauthentication.AuthProvider;
 import example.example.grading_engine.enums.userauthentication.UserRole;
@@ -40,6 +39,10 @@ public class User {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    /* 🔥 ADDED FIELD (No changes to existing code) */
+    @Column(name = "department_id")
+    private UUID departmentId;
 
     public User() {
     }
@@ -136,6 +139,15 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    /* 🔥 ADDED GETTER + SETTER */
+    public UUID getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(UUID departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,6 +172,7 @@ public class User {
                 ", isActive=" + isActive +
                 ", academicStatus=" + academicStatus +
                 ", createdAt=" + createdAt +
+                ", departmentId=" + departmentId +
                 '}';
     }
 
@@ -176,6 +189,9 @@ public class User {
         private Boolean isActive = true;
         private AcademicStatus academicStatus = AcademicStatus.ACTIVE;
         private LocalDateTime createdAt;
+
+        /* Optional: you can ignore this if you don't use builder for department */
+        private UUID departmentId;
 
         public Builder id(UUID id) {
             this.id = id;
@@ -217,8 +233,13 @@ public class User {
             return this;
         }
 
+        public Builder departmentId(UUID departmentId) {
+            this.departmentId = departmentId;
+            return this;
+        }
+
         public User build() {
-            return new User(
+            User user = new User(
                     id,
                     fullName,
                     email,
@@ -228,6 +249,8 @@ public class User {
                     academicStatus,
                     createdAt
             );
+            user.setDepartmentId(departmentId);
+            return user;
         }
     }
 }
