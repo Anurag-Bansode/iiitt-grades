@@ -1,5 +1,7 @@
 package example.example.grading_engine.service;
 
+
+import example.example.grading_engine.enums.grading.GradeLetter;
 import example.example.grading_engine.dto.SubjectMarks_GradingRequest;
 import example.example.grading_engine.dto.SubjectMarks_GradingResponse;
 import example.example.grading_engine.enums.marksvalidation.MarkComponentType;
@@ -58,12 +60,12 @@ class MarksServiceTest {
             assertNotNull(s.getGrade(), "Grade must be assigned by policy");
 
             if (s.getTotal().compareTo(BigDecimal.valueOf(35)) < 0) {
-                assertEquals("F", s.getGrade());
+                assertEquals(GradeLetter.F, s.getGrade());
                 foundFail = true;
             }
 
             if (s.getTotal().compareTo(BigDecimal.valueOf(85)) >= 0) {
-                assertNotEquals("F", s.getGrade(), "High scorer must not fail");
+                assertNotEquals(GradeLetter.F, s.getGrade(), "High scorer must not fail");
                 foundTopGrade = true;
             }
         }
