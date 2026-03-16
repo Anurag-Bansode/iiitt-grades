@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import example.example.grading_engine.dto.MarksUpdateRequest;
 
 @Service
 public class MarksService {
@@ -136,6 +137,16 @@ public class MarksService {
 
         return response;
 
+    }
+
+    public Mark updateMarks(@Valid MarksUpdateRequest request) {
+
+        Mark mark = marksRepository.findById(request.markId())
+                .orElseThrow(() -> new RuntimeException("Mark not found"));
+
+        mark.setMarks(request.marks());
+
+        return marksRepository.save(mark);
     }
 
     // simple bucket class used while building the response

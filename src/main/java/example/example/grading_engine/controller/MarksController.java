@@ -2,11 +2,14 @@ package example.example.grading_engine.controller;
 
 import example.example.grading_engine.dto.SubjectMarks_GradingRequest;
 import example.example.grading_engine.dto.SubjectMarks_GradingResponse;
+import example.example.grading_engine.dto.MarksUpdateRequest;
+import example.example.grading_engine.model.entity.Mark;
 import example.example.grading_engine.service.impl.MarksService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +36,12 @@ public class MarksController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Mark> updateMarks(
+            @Valid @RequestBody MarksUpdateRequest request
+    ) {
+        Mark updatedMark = marksService.updateMarks(request);
+        return ResponseEntity.ok(updatedMark);
+    }
 
 }
