@@ -2,11 +2,13 @@ package example.example.grading_engine.repository;
 
 import example.example.grading_engine.enums.marksvalidation.MarkComponentType;
 import example.example.grading_engine.model.entity.Mark;
+import example.example.grading_engine.model.entity.StudentEnrollment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -16,4 +18,9 @@ public interface MarksRepository extends JpaRepository<Mark, UUID> {
             String subjectCode,
             Collection<MarkComponentType> markTypes
     );
+    Optional<Mark> findByEnrollmentAndMarksType(
+            StudentEnrollment enrollment,
+            MarkComponentType marksType
+    );
+    List<Mark> findByEnrollment(StudentEnrollment enrollment);
 }

@@ -80,7 +80,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
                         .anyRequest().authenticated()
                 )
-//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+//               .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(accessDeniedHandler())
                 )

@@ -6,4 +6,12 @@ import java.util.UUID;
 
 public interface FacultyAssignmentRepository
         extends JpaRepository<FacultyAssignment, UUID> {
+
+    boolean existsByFacultyIdAndSubjectIdAndAcademicYearAndSemesterAndClassCodeAndIsActiveTrue(
+            UUID facultyId,
+            UUID subjectId,
+            String academicYear,
+            Integer semester,
+            String classCode
+    );
 }
