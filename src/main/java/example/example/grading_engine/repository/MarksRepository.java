@@ -22,4 +22,5 @@ public interface MarksRepository extends JpaRepository<Mark, UUID> {
             StudentEnrollment enrollment,
             MarkComponentType marksType
     );
+    List<Mark> findByEnrollment(StudentEnrollment enrollment);
 }

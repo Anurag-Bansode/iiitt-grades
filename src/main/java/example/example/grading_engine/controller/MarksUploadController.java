@@ -168,20 +168,25 @@ public class MarksUploadController {
         if(marks == -1) return;
 
         Mark m = marksRepository
-                .findByEnrollmentAndMarksType(enrollment, type)
+                .findByEnrollment(enrollment)
+                .stream()
+                .filter(x -> x.getMarksType() == type)
+                .findFirst()
                 .orElse(null);
 
         if(m == null){
             m = new Mark();
             m.setEnrollment(enrollment);
             m.setEnteredBy(faculty);
-            m.setMarksType(type);
             m.setEnteredAt(java.time.LocalDateTime.now());
         }
 
+        // IMPORTANT — force enum object (not string)
+        m.setMarksType(type);
+
         m.setMarks(BigDecimal.valueOf(marks));
 
-        marksRepository.save(m);
+        marksRepository.saveAndFlush(m);
     }
 
     private String getRoll(Row row){

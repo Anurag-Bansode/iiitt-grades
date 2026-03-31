@@ -5,7 +5,8 @@ import example.example.grading_engine.enums.marksvalidation.MarkComponentType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class Mark {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "marks_type", nullable = false)
+    @Column(name = "marks_type", columnDefinition = "mark_component_type")
     private MarkComponentType marksType;
 
     @Column(name = "marks", nullable = false, precision = 5, scale = 2)

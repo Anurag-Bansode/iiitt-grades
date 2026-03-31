@@ -73,14 +73,14 @@ public class SecurityConfig {
                 .sessionManagement(
                         s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/faculty/**").hasRole("FACULTY")
-                        .requestMatchers("/api/hod/**").hasRole("HOD")
-                        .requestMatchers("/api/student/**").hasRole("STUDENT")
-                        .anyRequest().authenticated()
-                )
-//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/faculty/**").hasRole("FACULTY")
+//                        .requestMatchers("/api/hod/**").hasRole("HOD")
+//                        .requestMatchers("/api/student/**").hasRole("STUDENT")
+//                        .anyRequest().authenticated()
+//                )
+               .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(accessDeniedHandler())
                 )
