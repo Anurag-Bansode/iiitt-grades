@@ -74,7 +74,7 @@ public class SecurityConfig {
                         s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/faculty/**").hasRole("FACULTY")
                         .requestMatchers("/api/hod/**").hasRole("HOD")
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
